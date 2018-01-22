@@ -1,20 +1,24 @@
 <template>
-  <v-container>
+  <v-container grid-list-lg>
     <v-layout wrap>
       <v-flex xs12 sm6 md4>
         <nuevo-inmueble></nuevo-inmueble>
       </v-flex>
+      <v-flex xs12 sm6 md4>
+        <alquilar-inmueble></alquilar-inmueble>
+      </v-flex>
     </v-layout>
-      <span> {{getshit}}</span>
+ 
   </v-container>
 
 </template>
 <script>
 import firebase from 'firebase'
 import NuevoInmueble from './NuevoInmueble'
+import AlquilarInmueble from './AlquilarInmueble'
 export default {
   name: 'inicio',
-  components: {NuevoInmueble},
+  components: {NuevoInmueble, AlquilarInmueble},
   data() {
     return {}
   },

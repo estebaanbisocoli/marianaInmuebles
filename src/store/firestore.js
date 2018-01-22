@@ -11,6 +11,15 @@ firebase.initializeApp({
 const firestore = firebase.firestore()
 
 var inmuebles
+const obtenerColeccion = (collection) => {
+    var myArr = []
+    collection.onSnapshot(querySnapshot => {
+        querySnapshot.forEach(doc => {
+            myArr.push({id : doc.id, ...doc.data()})
+        })
+    })
+    return myArr
+}
 
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -20,14 +29,13 @@ firebase.auth().onAuthStateChanged(user => {
             const misInmuebles = []
             querySnapshot.forEach(doc => {
                 var misPagos = []
-                console.log(doc.data(), 'firestore doc')
-                misInmuebles.push({id: doc.id, ...doc.data()})
                 pagos = inmuebles.doc(doc.id).collection('pagos')
-                pagos.onSnapshot(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        console.log(doc.data(), 'pagos')
-                    })
-                })
+                misPagos = obtenerColeccion(pagos)
+                var misContratos = []
+                var contratos = inmuebles.doc(doc.id).collection('contratos')
+                misContratos = obtenerColeccion(contratos)
+                misInmuebles.push({id: doc.id, ...doc.data(), pagos: misPagos, contratos: misContratos})
+                
             })
             store.commit('observarInmuebles', misInmuebles)
         })
@@ -50,7 +58,11 @@ export default {
     removeInmueble: id => {
         return inmuebles.doc(id).delete()
     },
+    cambiarEstado: id => {
+        inmuebles.doc(id).set({estado:'Alquilado'})
+    },
     alquilarInmueble: (id, infoAlquiler) => {
-        
+        cambiarEstado(id)
+        return inmuebles.doc(id).collection('contratos').add(infoAlquiler)
     }
 }

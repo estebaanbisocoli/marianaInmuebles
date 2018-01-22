@@ -19,7 +19,7 @@ Vue.use(Vuetify, {
     error: '#b71c1c'
   }
 })
-Vue.config.productionTip = false
+Vue.config.productionTip = true
 firebase.auth().onAuthStateChanged((user)=>{
   if (!app) {
     app = new Vue({

@@ -1,0 +1,33 @@
+<template>
+    <v-card>
+        <v-toolbar color="primary" dark>
+            <v-toolbar-title>Sin Alquilar</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon>
+                <v-icon>search</v-icon>
+            </v-btn>
+        </v-toolbar>
+        <v-list>
+            <template v-for="item in items">
+                <v-list-tile avatar :key="item.id" @click="">
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{item.direccion}}</v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-spacer></v-spacer>
+                    <v-icon>home</v-icon>
+                </v-list-tile>
+                <v-divider  v-if="item.divider"></v-divider>
+            </template>
+        </v-list>
+    </v-card>
+</template>
+<script>
+export default {
+    name: 'alquilar-inmueble',
+    computed: {
+        items() {
+            return this.$store.getters.getInmueblesSinAlquilar
+        }
+    }
+}
+</script>

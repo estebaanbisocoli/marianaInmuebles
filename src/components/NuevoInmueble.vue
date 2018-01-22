@@ -1,8 +1,8 @@
 <template>
   <v-card>
-    <v-card-title>
-      <span class="headline">Nueva Propiedad</span>
-    </v-card-title>
+    <v-toolbar color="primary" dark>
+      <v-toolbar-title>Nueva Propiedad</v-toolbar-title>
+    </v-toolbar>
     <v-card-text>
       <v-container grid-list-md>
           <v-layout row>
