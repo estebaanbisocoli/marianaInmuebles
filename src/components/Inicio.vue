@@ -8,7 +8,7 @@
         <alquilar-inmueble></alquilar-inmueble>
       </v-flex>
     </v-layout>
- 
+    <nuevo-contrato></nuevo-contrato>
   </v-container>
 
 </template>
@@ -16,9 +16,10 @@
 import firebase from 'firebase'
 import NuevoInmueble from './NuevoInmueble'
 import AlquilarInmueble from './AlquilarInmueble'
+import NuevoContrato from './NuevoContrato'
 export default {
   name: 'inicio',
-  components: {NuevoInmueble, AlquilarInmueble},
+  components: {NuevoInmueble, AlquilarInmueble, NuevoContrato},
   data() {
     return {}
   },

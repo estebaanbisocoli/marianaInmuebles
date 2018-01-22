@@ -42,6 +42,7 @@ firebase.auth().onAuthStateChanged(user => {
     }
 })
 
+
 export default {
     fetchInmuebles: () => {
         return inmuebles.get()
@@ -64,5 +65,8 @@ export default {
     alquilarInmueble: (id, infoAlquiler) => {
         cambiarEstado(id)
         return inmuebles.doc(id).collection('contratos').add(infoAlquiler)
+    },
+    getInmuebleId: (id) => {
+        return inmuebles.doc(id).get()
     }
 }

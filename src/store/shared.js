@@ -15,6 +15,15 @@ export default {
         getInmuebles(state) {
             return state.inmuebles
         },
+        getInmueble(state) {
+            return (id) => {
+                firestore.getInmuebleId(id).then(doc=> {
+                    if (doc.exists) {
+                        return doc.data()
+                    }
+                })
+            }
+        },
         getInmueblesSinAlquilar(state) {
             let myArr = []
             const inmuebles = state.inmuebles
