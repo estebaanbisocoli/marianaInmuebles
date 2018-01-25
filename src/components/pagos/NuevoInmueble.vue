@@ -1,4 +1,5 @@
 <template>
+<v-dialog v-model="dialog" persistent max-width="300px">
   <v-card>
     <v-toolbar color="primary" dark>
       <v-toolbar-title>Nueva Propiedad</v-toolbar-title>
@@ -34,9 +35,12 @@
     >
       Agregar
     </v-btn>
- 
+    <v-btn @click="close">
+      Cerrar
+    </v-btn>
  </v-card-text>
   </v-card>
+  </v-dialog>
 </template>
 <script>
   import {mapActions, mapState} from 'vuex'
@@ -45,27 +49,42 @@
     data: () => ({
       valid: true,
       numero: '',
-  
+      dialog: false,
       calle: '',
 
     }),
     methods: {
       submit () {
         if(Number(this.numero) && this.calle) {
-          console.log('entro a submit')
-          
+ 
           this.$store.dispatch('addInmueble',{numero: this.numero,
           calle: this.calle})
+
+        this.close()
+        }
+      },
+      close() {
           this.numero = ''
           this.calle = ''
-   
-        }
+          this.dialog = false,
+          this.$emit('cerrarDialogo')
       }
     },
     computed: {
-      getInmueblesIndex () {
-        return this.$store.getters.inmueblesIndex
+      nuevoEstado() {
+        return this.cambiarEstado
       }
-    }
+    },
+    watch: {
+      nuevoEstado(value) {
+        if (value == true) {
+          this.dialog = true
+        }
+        else {
+          this.dialog = false
+        }
+      }
+    },
+    props: ['cambiarEstado']
   }
 </script>

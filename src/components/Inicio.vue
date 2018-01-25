@@ -1,14 +1,16 @@
 <template>
-  <v-container grid-list-lg>
-    <v-layout wrap>
-      <v-flex xs12 sm6 md4>
+  <v-container grid-list-lg fill-height>
+    <v-layout wrap fill-height>
+      <v-flex xs12 sm6 md4 >
         <nuevo-inmueble></nuevo-inmueble>
       </v-flex>
-      <v-flex xs12 sm6 md4>
+      <v-flex xs12 sm6 lg4 v-show="show">
         <alquilar-inmueble></alquilar-inmueble>
       </v-flex>
+      <v-flex xs12 sm6 lg4>
+        <nuevo-pago></nuevo-pago>
+      </v-flex>
     </v-layout>
-    <nuevo-contrato></nuevo-contrato>
   </v-container>
 
 </template>
@@ -17,13 +19,28 @@ import firebase from 'firebase'
 import NuevoInmueble from './NuevoInmueble'
 import AlquilarInmueble from './AlquilarInmueble'
 import NuevoContrato from './NuevoContrato'
+import NuevoPago from './NuevoPago'
+
 export default {
   name: 'inicio',
-  components: {NuevoInmueble, AlquilarInmueble, NuevoContrato},
+  components: {NuevoInmueble, AlquilarInmueble, NuevoPago},
   data() {
-    return {}
+    return {
+      show: true
+    }
+  },
+  watch: {
+    items(value) {
+      if (value.length === 0) 
+        this.show = false
+       else
+        this.show = true
+    }
   },
   computed: {
+    items() {
+            return this.$store.getters.getInmueblesSinAlquilar
+        },
     getshit() {
       return this.$store.getters.getInmuebles
     },

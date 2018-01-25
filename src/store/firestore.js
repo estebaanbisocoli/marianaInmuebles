@@ -1,6 +1,7 @@
-import firebase from 'firebase'
+import * as firebase from 'firebase'
 import store from './index'
 require('firebase/firestore')
+
 firebase.initializeApp({    
     apiKey: "AIzaSyCD_bGrEc-DzMFsZZMYneugHexbOjaZuVo",
     authDomain: "mariana-b131c.firebaseapp.com",
@@ -12,13 +13,22 @@ const firestore = firebase.firestore()
 
 var inmuebles
 const obtenerColeccion = (collection) => {
-    var myArr = []
-    collection.onSnapshot(querySnapshot => {
-        querySnapshot.forEach(doc => {
-            myArr.push({id : doc.id, ...doc.data()})
+    return new Promise(resolve => {
+        collection.onSnapshot(querySnapshot => {
+            const myArr = []
+            querySnapshot.forEach(doc => {
+             
+                myArr.push({id : doc.id, ...doc.data()})
+            })
+            resolve(myArr)
         })
     })
-    return myArr
+     
+}
+var obtenerAsync = async (collection) => {
+   var arr = await obtenerColeccion(collection)
+   return arr
+  
 }
 
 firebase.auth().onAuthStateChanged(user => {
@@ -27,22 +37,22 @@ firebase.auth().onAuthStateChanged(user => {
         inmuebles = firestore.collection('inmuebles')
         inmuebles.onSnapshot(querySnapshot => {
             const misInmuebles = []
+            
             querySnapshot.forEach(doc => {
-                var misPagos = []
-                pagos = inmuebles.doc(doc.id).collection('pagos')
-                misPagos = obtenerColeccion(pagos)
-                var misContratos = []
-                var contratos = inmuebles.doc(doc.id).collection('contratos')
-                misContratos = obtenerColeccion(contratos)
-                misInmuebles.push({id: doc.id, ...doc.data(), pagos: misPagos, contratos: misContratos})
-                
+                misInmuebles.push({id: doc.id, ...doc.data()}) 
             })
             store.commit('observarInmuebles', misInmuebles)
         })
     }
 })
+var cambiarEstado= (id, estado) => {
+    inmuebles.doc(id).update({estado})
+}
+var getContratoValido = (id) => {
+    
+    return inmuebles.doc(id).collection('contratos').where("estado", "==", "Valido").get()
 
-
+}
 export default {
     fetchInmuebles: () => {
         return inmuebles.get()
@@ -59,14 +69,27 @@ export default {
     removeInmueble: id => {
         return inmuebles.doc(id).delete()
     },
-    cambiarEstado: id => {
-        inmuebles.doc(id).set({estado:'Alquilado'})
-    },
+
     alquilarInmueble: (id, infoAlquiler) => {
-        cambiarEstado(id)
+        cambiarEstado(id, 'Alquilado')
         return inmuebles.doc(id).collection('contratos').add(infoAlquiler)
     },
     getInmuebleId: (id) => {
         return inmuebles.doc(id).get()
+    },
+
+    nuevoPago : (id, monto) => {
+       return getContratoValido(id).then(querySnapshot => {
+           inmuebles.doc(id).collection('contratos').doc(querySnapshot.docs[0].id).collection('pagos').add({monto, timestamp: Date.now()})
+       })
+    },
+    getInmueble: (id) => {
+        return inmuebles.doc(id).get()
+    },
+    getContratoValido,
+    getPagos(idInmueble, idContrato) {
+        return inmuebles.doc(idInmueble).collection('contratos').doc(idContrato).collection('pagos').get()
     }
+
+
 }

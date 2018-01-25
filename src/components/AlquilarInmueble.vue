@@ -20,7 +20,7 @@
                
             </template>
         </v-list>
-        <nuevo-contrato :dialog="dialog" :itemId="idSelected"></nuevo-contrato>
+        <nuevo-contrato @reset="idSelected= ''":itemId="idSelected"></nuevo-contrato>
     </v-card>
 </template>
 <script>

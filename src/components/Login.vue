@@ -14,7 +14,7 @@
                 <v-text-field prepend-icon="lock" name="password" label="Contraseña" id="password" type="password" v-model="password"></v-text-field>
                 <v-card-actions>
                 <v-spacer></v-spacer>
-                 <v-btn type="submit" color="primary">Ingresar</v-btn>
+                 <v-btn :loading="loading" :disabled="loading" type="submit" color="primary">Ingresar</v-btn>
             </v-card-actions>
             </v-form>
             </v-card-text>
@@ -32,7 +32,8 @@
     data: () => ({
       drawer: null,
       email: '',
-      password: ''
+      password: '',
+      loading: false
     }),
     props: {
       source: String
@@ -45,13 +46,15 @@
     watch: {
       user(value) {
         if (value !== null && value !== undefined) {
-          this.$router.push('/inicio')
+          this.$router.push('/pagos')
         }
       }
     },
     methods: {
       singIn() {
+        this.loading=true
         this.$store.dispatch('singUserIn', {email: this.email, password: this.password})
+        
       }
     }
   }

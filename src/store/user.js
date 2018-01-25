@@ -12,18 +12,18 @@ export default {
     actions: {
         singUserIn({commit}, payload) {
             console.log('entro')
-            firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-                .then(user => {
-                    console.log('todobien   ')
-                    const newUser = {
-                        id: user.uid,
-                        email: user.email
-                    }
-                    commit('setUser', newUser)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)        .then(user => {
+                
+                const newUser = {
+                  id: user.uid,
+                  email: user.email
+                }
+                commit('setUser', newUser)
+              })
+              .catch(err => {
+                alert(err)
+              })
+ 
         },
         logOut({commit}) {
             firebase.auth().signOut()

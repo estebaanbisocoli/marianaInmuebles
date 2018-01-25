@@ -1,39 +1,31 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      fixed
-      v-model="drawer"
-      app
-    >
-      <v-list dense>
+    <v-navigation-drawer disable-resize-watcher floating fixed app v-model="drawer">
+      <v-list>
         <v-list-tile @click="">
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
-          </v-list-tile-content>
+        <v-list-tile-action><v-icon>gavel</v-icon></v-list-tile-action>
+        <v-list-tile-content>
+          Pagos
+        </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="">
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
-          </v-list-tile-content>
+        <v-list-tile @click="logOut" v-show="userIsAuthenticated">
+          <v-list-tile-action><v-icon>close</v-icon></v-list-tile-action>
+          <v-list-tile-content>Salir</v-list-tile-content>
         </v-list-tile>
+        
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="primary" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
-      
-      <v-toolbar-items class="hidden-sm-and-down">
-        <!-- <v-btn flat>Link One</v-btn>
-        <v-btn flat>Link Two</v-btn> -->
-        <v-btn flat v-show="userIsAuthenticated" @click="logOut">Salir</v-btn>
-      </v-toolbar-items>
+      <v-toolbar-side-icon 
+        @click.native.stop="drawer = !drawer"
+        class="hidden-md-and-up"></v-toolbar-side-icon>
+      <v-toolbar-title >Alquileres</v-toolbar-title>
 
+      <v-spacer></v-spacer>
+      <v-toolbar-items v-show="userIsAuthenticated">
+        <v-btn class="hidden-sm-and-down"  color="white" flat><v-icon left>gavel</v-icon>Pagos</v-btn>
+        <v-btn class="hidden-sm-and-down"  color="white" flat @click="logOut"><v-icon left>close</v-icon>Salir</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
@@ -48,7 +40,7 @@
   import firebase from 'firebase'
   export default {
     data: () => ({
-      drawer: null
+      drawer: false
     }),
     props: {
       source: String
