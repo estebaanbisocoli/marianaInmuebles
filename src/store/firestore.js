@@ -12,83 +12,61 @@ firebase.initializeApp({
 const firestore = firebase.firestore()
 
 var inmuebles
-const obtenerColeccion = (collection) => {
-    return new Promise(resolve => {
-        collection.onSnapshot(querySnapshot => {
-            const myArr = []
-            querySnapshot.forEach(doc => {
-             
-                myArr.push({id : doc.id, ...doc.data()})
-            })
-            resolve(myArr)
-        })
-    })
-     
-}
-var obtenerAsync = async (collection) => {
-   var arr = await obtenerColeccion(collection)
-   return arr
-  
-}
+
 
 firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-        var pagos
+    console.log()
+    if (firebase.auth().currentUser) {
         inmuebles = firestore.collection('inmuebles')
         inmuebles.onSnapshot(querySnapshot => {
             const misInmuebles = []
-            
+          
             querySnapshot.forEach(doc => {
                 misInmuebles.push({id: doc.id, ...doc.data()}) 
+               
             })
+            
             store.commit('observarInmuebles', misInmuebles)
         })
+  
     }
 })
-var cambiarEstado= (id, estado) => {
-    inmuebles.doc(id).update({estado})
-}
-var getContratoValido = (id) => {
-    
-    return inmuebles.doc(id).collection('contratos').where("estado", "==", "Valido").get()
 
-}
+
 export default {
     fetchInmuebles: () => {
         return inmuebles.get()
     },
 
     addInmueble: inmueble => {
-        return inmuebles.add(inmueble).then(doc => {
-            alert('El inmueble ha sido guardado con exito')
-        }).catch(e=> {
-            alert('Su conexion es muy lenta para guardar el inmueble')
-        })
+        return inmuebles.add(inmueble)
     },
-
     removeInmueble: id => {
         return inmuebles.doc(id).delete()
     },
-
+    updateInmueble: (id, obj) => {
+        return inmuebles.doc(id).update(obj)
+    }, 
     alquilarInmueble: (id, infoAlquiler) => {
         cambiarEstado(id, 'Alquilado')
-        return inmuebles.doc(id).collection('contratos').add(infoAlquiler)
+        return inmuebles.doc(id).set({comtrato: infoAlquiler})
     },
     getInmuebleId: (id) => {
         return inmuebles.doc(id).get()
     },
 
     nuevoPago : (id, monto) => {
-       return getContratoValido(id).then(querySnapshot => {
-           inmuebles.doc(id).collection('contratos').doc(querySnapshot.docs[0].id).collection('pagos').add({monto, timestamp: Date.now()})
-       })
+        return inmuebles.doc(id).collection('pagos').add({monto, timestamp: new Date(Date.now())})
     },
     getInmueble: (id) => {
         return inmuebles.doc(id).get()
     },
-    getContratoValido,
-    getPagos(idInmueble, idContrato) {
-        return inmuebles.doc(idInmueble).collection('contratos').doc(idContrato).collection('pagos').get()
+
+    getPagos(idInmueble) {
+        return inmuebles.doc(idInmueble).collection('pagos').get()
+    },
+    removePago(idInmueble,idPago) {
+        return inmuebles.doc(idInmueble).collection('pagos').doc(idPago).delete()
     }
 
 

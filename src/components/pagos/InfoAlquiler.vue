@@ -16,19 +16,19 @@
             <v-layout column class="lightgrey">
                 <v-flex xs12><h4>Restante</h4></v-flex>
                 <v-flex xs12>
-                    <h5>alquiler.restante</h5>
+                    <h5>{{alquiler.restante}}</h5>
                 </v-flex>
             </v-layout>
             <v-layout column >
                 <v-flex xs12><h4>Vencimiento</h4></v-flex>
                 <v-flex xs12>
-                    <h5>alquiler.vencimiento</h5>
+                    <h5>{{alquiler.vencimiento}}</h5>
                 </v-flex>
             </v-layout>
             <v-layout column class="lightgrey">
                 <v-flex xs12><h4>Este Mes</h4></v-flex>
                 <v-flex xs12>
-                    <h5>alquiler.mes</h5>
+                    <h5>{{alquiler.mes}}</h5>
                 </v-flex>
             </v-layout>
         </v-flex>

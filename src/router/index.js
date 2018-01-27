@@ -4,27 +4,35 @@ import Inicio from '@/components/inicio'
 import Login from '@/components/Login'
 import InicioPagos from '@/components/pagos/InicioPagos'
 import firebase from 'firebase'
-
+import FirebaseTest from '@/components/test/FirebaseTest'
 Vue.use(Router)
 
 let router = new Router({
   routes: [
-    {
-      path: '/pagos',
-      name: 'Pagos',
-      component: InicioPagos,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/inicio',
-      name: 'Inicio',
-      component: Inicio,
-      meta: {
-        requiresAuth: true
-      }
-    },
+       {
+         path: '/firebaseTest',
+         name: 'firebaseTest',
+         component: FirebaseTest,
+         meta: {
+           requiresAuth: true
+         }
+       },
+    // {
+    //   path: '/pagos',
+    //   name: 'Pagos',
+    //   component: InicioPagos,
+    //   meta: {
+    //     requiresAuth: true
+    //   }
+    // },
+    // {
+    //   path: '/inicio',
+    //   name: 'Inicio',
+    //   component: Inicio,
+    //   meta: {
+    //     requiresAuth: true
+    //   }
+    // },
     {
       path: '*',
       redirect: '/login'
@@ -49,7 +57,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !currentUser) {
     next('login')
   }
-  else if (!requiresAuth && currentUser) next('pagos')
+  else if (!requiresAuth && currentUser) next('firebaseTest')
   else {
     next()
     
