@@ -38,7 +38,6 @@ export default {
     },
     computed: {
         items() {
-            console.log(this.$store.getters.getInmueblesConEstado)
             return this.$store.getters.getInmueblesConEstado
         }
     },
@@ -47,7 +46,7 @@ export default {
             this.cambiarEstado = !this.cambiarEstado
         },
         actualizar(id) {
-            this.$store.dispatch('actualizarDescripcion', id)
+            this.$store.commit('seleccionarInmueble', id)
         }
     }
 

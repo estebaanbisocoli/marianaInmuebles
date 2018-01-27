@@ -1,6 +1,6 @@
 import firestore from './firestore'
 import store from './index'
-
+import _ from 'lodash'
 const calcularRestante = (pagos, total) => {
     var  suma = 0
     pagos.forEach(pago => {
@@ -11,13 +11,16 @@ const calcularRestante = (pagos, total) => {
 
 export default {
     state: {
-        inmuebles : [],
+        inmuebles: [],
         inmuebleActual: {}
-
     },
-    mutations: {
+    mutations : {
         observarInmuebles(state, inmuebles) {
             state.inmuebles = inmuebles
+        },
+        seleccionarInmueble(state, id) {
+            state.inmuebleActual = _.find(state.inmuebles, 'id', id)
+         
         }
     },
     getters: {
@@ -51,9 +54,18 @@ export default {
             }
             return myArr
         },
-       
+       getInmuebleActualBasico(state) {
+           if(state.inmuebleActual) {
+                return {
+                    direccion: state.inmuebleActual.calle + ' ' + state.inmuebleActual.numero,
+                    estado: state.inmuebleActual.estado,
+                }
+           }
+       },
+
     
     },
+  
     // actions: {
     //     // actualizarInmueble({commit}, idInmueble) {
     //     //     return firestore.getInmueble(idInmueble)

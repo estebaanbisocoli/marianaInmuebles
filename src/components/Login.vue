@@ -46,7 +46,7 @@
     watch: {
       user(value) {
         if (value !== null && value !== undefined) {
-          this.$router.push('/firebaseTest')
+          this.$router.push('/pagos')
         }
       }
     },

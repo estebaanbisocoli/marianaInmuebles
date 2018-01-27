@@ -8,9 +8,10 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     modules: {
+      database: database,
       user: user,
       shared: shared,
-      database: database
+
 
     }
   })

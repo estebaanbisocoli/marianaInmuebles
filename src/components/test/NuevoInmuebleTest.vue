@@ -39,7 +39,7 @@
   </v-card>
 </template>
 <script>
- 
+ import firestore from '../../store/firestore'
   export default {
     name:'nuevo-inmueble',
     data: () => ({
@@ -52,10 +52,8 @@
     methods: {
       submit () {
         if(Number(this.numero) && this.calle) {
-          console.log('entro a submit')
-          
-          this.$store.dispatch('agregarInmueble',{numero: this.numero,
-          calle: this.calle}).then(doc => {
+          firestore.addInmueble({calle: this.calle, numero:this.numero})
+          .then(doc => {
             alert('se agrego Inmueble')
           }).catch(e => {
             alert('no se pudo agregar inmueble')

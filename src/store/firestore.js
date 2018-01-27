@@ -1,6 +1,7 @@
 import * as firebase from 'firebase'
 import store from './index'
 require('firebase/firestore')
+//Falta checkear que sean unicos, esto se puede hacer con alguna funcion de loadash chequeando uno por uno los valores en el store
 
 firebase.initializeApp({    
     apiKey: "AIzaSyCD_bGrEc-DzMFsZZMYneugHexbOjaZuVo",
@@ -19,19 +20,35 @@ firebase.auth().onAuthStateChanged(user => {
     if (firebase.auth().currentUser) {
         inmuebles = firestore.collection('inmuebles')
         inmuebles.onSnapshot(querySnapshot => {
-            const misInmuebles = []
-          
+            const misInmuebles = []          
             querySnapshot.forEach(doc => {
-                misInmuebles.push({id: doc.id, ...doc.data()}) 
-               
+                const pagos = []
+                inmuebles.doc(doc.id).collection('pagos').onSnapshot(querySnapshot=> {
+                    querySnapshot.forEach(pago => {
+                        if(pago) {
+                            pagos.push({id: pago.id, ...pago.data()})
+                        }
+                    })
+                    console.log(pagos)
+                })
+                misInmuebles.push({id: doc.id, ...doc.data(), pagos})
+
             })
-            
             store.commit('observarInmuebles', misInmuebles)
         })
-  
     }
 })
-
+const alquilarEstaddo = (idInmueble) => {
+    return inmuebles.update({estado: 'Alquilado'})
+}
+const alquilarInm = (id, infoAlquiler) => {
+    return inmuebles.update({
+        total: infoAlquiler.total,
+        vencimiento : infoAlquiler.vencimiento,
+        nombre: infoAlquiler.nombre,
+        apellido: infoAlquiler.apellido
+    })
+}
 
 export default {
     fetchInmuebles: () => {
@@ -39,17 +56,19 @@ export default {
     },
 
     addInmueble: inmueble => {
-        return inmuebles.add(inmueble)
+        return inmuebles.add({...inmueble, estado: 'Libre'})
     },
     removeInmueble: id => {
         return inmuebles.doc(id).delete()
     },
     updateInmueble: (id, obj) => {
         return inmuebles.doc(id).update(obj)
-    }, 
+    },
+
     alquilarInmueble: (id, infoAlquiler) => {
-        cambiarEstado(id, 'Alquilado')
-        return inmuebles.doc(id).set({comtrato: infoAlquiler})
+         return alquilarEstaddo(id).then(doc => {
+            return alquilarInm(id, infoAlquiler)
+        })
     },
     getInmuebleId: (id) => {
         return inmuebles.doc(id).get()

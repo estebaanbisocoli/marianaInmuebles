@@ -1,9 +1,10 @@
 import firestore from './firestore'
 export default {
     state: {
-        errorFirebase: ''
+        errorFirebase: '',
     },
     mutations: {
+
         cleanError(state) {
             state.errorFirebase = {}
         },
@@ -12,12 +13,6 @@ export default {
         }
     },
     actions: {
-        agregarInmueble({commit}, payload) {
-            firestore.addInmueble(payload).then(doc => {
-                commit('cleanError')
-            }).catch(err => {
-                commit('newError', err.message)
-            })
-        }
+
     }
 }

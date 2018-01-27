@@ -3,14 +3,8 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent max-width="350px">
         <v-card>
-            <v-container v-if="loading">
-                <v-layout row>
-                    <v-flex offset-xs5>
-                        <circle8 class="loading"></circle8>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-            <v-toolbar color="primary" dark v-show="!loading">
+  
+            <v-toolbar color="primary" dark >
                 <v-toolbar-title>{{calle}} {{numero}}</v-toolbar-title>
             </v-toolbar>
           <v-container grid-list-md class="pl-2 pr-2" v-show="!loading">
@@ -56,10 +50,10 @@
 </template>
 <script>
 import firestore from '../store/firestore'
-import {Circle8} from 'vue-loading-spinner'
+
   export default {
       name: 'nuevo-contrato',
-      components : {Circle8},
+     
     data () {
       return {
           calle: '',
@@ -76,7 +70,7 @@ import {Circle8} from 'vue-loading-spinner'
     methods: {
         alquilar() {
             this.btnLoad = true
-            this.$store.dispatch('addAlquiler', {
+            firestore.alquilarInmueble({
                 id: this.itemId,
                 total: this.total,
                 vencimiento: this.vencimiento,

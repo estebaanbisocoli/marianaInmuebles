@@ -7,7 +7,7 @@
                 <v-btn :disabled="disabled" flat dark><v-icon>home</v-icon></v-btn>
             </v-toolbar-items>
         </v-toolbar>
-        <v-card-title><h3>{{direccion}}</h3><v-spacer></v-spacer><h3>Alquilada</h3></v-card-title>
+        <v-card-title v-if="inmuebleActual"><h3>{{inmuebleActual.direccion}}</h3><v-spacer></v-spacer><h3>{{inmuebleActual.estado}}</h3></v-card-title>
         <v-divider></v-divider>
         <v-card-text class="pa-0">
             <info-alquiler></info-alquiler>
@@ -25,7 +25,11 @@ export default {
             direccion: 'Blegrano 1266'
         }
     },
-
+    computed : {
+        inmuebleActual() {
+            return this.$store.getters.getInmuebleActualBasico
+        }
+    }
 }
 </script>
 

@@ -17,22 +17,22 @@ let router = new Router({
            requiresAuth: true
          }
        },
-    // {
-    //   path: '/pagos',
-    //   name: 'Pagos',
-    //   component: InicioPagos,
-    //   meta: {
-    //     requiresAuth: true
-    //   }
-    // },
-    // {
-    //   path: '/inicio',
-    //   name: 'Inicio',
-    //   component: Inicio,
-    //   meta: {
-    //     requiresAuth: true
-    //   }
-    // },
+    {
+      path: '/pagos',
+      name: 'Pagos',
+      component: InicioPagos,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/inicio',
+      name: 'Inicio',
+      component: Inicio,
+      meta: {
+        requiresAuth: true
+      }
+    },
     {
       path: '*',
       redirect: '/login'
@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !currentUser) {
     next('login')
   }
-  else if (!requiresAuth && currentUser) next('firebaseTest')
+  else if (!requiresAuth && currentUser) next('pagos')
   else {
     next()
     
