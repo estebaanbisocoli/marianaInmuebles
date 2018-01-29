@@ -31,6 +31,8 @@
 
 
     <v-btn color="info"
+    :loading="loading"
+    :disabled="loading"
       @click="submit"
     >
       Agregar
@@ -43,7 +45,7 @@
   </v-dialog>
 </template>
 <script>
-  import {mapActions, mapState} from 'vuex'
+  import firestore from '../../store/firestore'
   export default {
     name:'nuevo-inmueble',
     data: () => ({
@@ -51,17 +53,28 @@
       numero: '',
       dialog: false,
       calle: '',
+      loading: false
 
     }),
     methods: {
       submit () {
         if(Number(this.numero) && this.calle) {
- 
-          this.$store.dispatch('addInmueble',{numero: this.numero,
-          calle: this.calle})
-
-        this.close()
+          this.loading = true
+          firestore.addInmueble({numero: this.numero,
+          calle: this.calle}).then(doc => {
+            this.loading = false
+            this.close()
+          }).catch(e => {
+            this.loading = false
+            alert(err.message)
+            this.close
+          })
         }
+        else {
+          alert('falta info')
+        }
+
+    
       },
       close() {
           this.numero = ''

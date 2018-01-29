@@ -3,24 +3,27 @@ import store from './index'
 import _ from 'lodash'
 const calcularRestante = (pagos, total) => {
     var  suma = 0
-    pagos.forEach(pago => {
-        total += pago.monto
-    })
+    if (pagos) {
+        pagos.forEach(pago => {
+            total += pago.monto
+        })
+    }
     return total - suma
 }
 
 export default {
     state: {
         inmuebles: [],
-        inmuebleActual: {}
+        inmuebleActual: null
     },
     mutations : {
         observarInmuebles(state, inmuebles) {
             state.inmuebles = inmuebles
         },
         seleccionarInmueble(state, id) {
-            state.inmuebleActual = _.find(state.inmuebles, 'id', id)
-         
+            state.inmuebleActual =_.find(state.inmuebles, (obj) => {
+                return obj.id === id
+            })
         }
     },
     getters: {
@@ -62,6 +65,33 @@ export default {
                 }
            }
        },
+       getDireccionActual(state) {
+           if(state.inmuebleActual) {
+           return {
+               dir: state.inmuebleActual.calle + ' ' + state.inmuebleActual.numero,
+               id: state.inmuebleActual.id,
+           }
+        }
+       },
+       getInmuebleActualInfo(state) {
+           if (state.inmuebleActual === null) {
+               return null
+           } 
+           else if (state.inmuebleActual.estado === 'Libre') {
+               return {
+                   estado : 'Libre'
+               }
+           }
+           else {
+               return {
+                   inquilino: state.inmuebleActual.nombre + ' ' + state.inmuebleActual.apellido,
+                   monto: state.inmuebleActual.total,
+                   restante: calcularRestante(state.inmuebleActual.pagos, state.inmuebleActual.total),
+                   vencimiento: state.inmuebleActual.vencimiento,
+                   mes: 0
+               }
+           }
+       }
 
     
     },

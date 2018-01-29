@@ -39,10 +39,10 @@ firebase.auth().onAuthStateChanged(user => {
     }
 })
 const alquilarEstaddo = (idInmueble) => {
-    return inmuebles.update({estado: 'Alquilado'})
+    return inmuebles.doc(idInmueble).update({estado: 'Alquilado'})
 }
 const alquilarInm = (id, infoAlquiler) => {
-    return inmuebles.update({
+    return inmuebles.doc(id).update({
         total: infoAlquiler.total,
         vencimiento : infoAlquiler.vencimiento,
         nombre: infoAlquiler.nombre,

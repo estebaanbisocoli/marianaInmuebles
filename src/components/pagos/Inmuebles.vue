@@ -12,7 +12,7 @@
         <v-card-text>
         <v-list>
             <template v-for="item in items">
-                <v-list-tile  avatar @click.stop="actualizar(item.id)" :disabled="loading" :key="item.id" >
+                <v-list-tile  avatar @click="actualizar(item.id)" :disabled="loading" :key="item.id" >
                     <v-list-tile-content>
                         <v-list-tile-title>{{item.direccion}}</v-list-tile-title>
                     </v-list-tile-content>
@@ -46,6 +46,7 @@ export default {
             this.cambiarEstado = !this.cambiarEstado
         },
         actualizar(id) {
+            console.log(id)
             this.$store.commit('seleccionarInmueble', id)
         }
     }

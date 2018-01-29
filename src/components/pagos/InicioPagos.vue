@@ -32,7 +32,7 @@ export default {
             
         }
     },
-    created() {
+    mounted() {
         if (!this.$store.getters.user) {
             let currentUser = firebase.auth().currentUser
             this.$store.commit('setUser', {email: currentUser.email, uid: currentUser.uid})

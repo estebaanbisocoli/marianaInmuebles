@@ -1,7 +1,8 @@
 <template>
     <v-card flat>
-        <div v-if="alquiler">
-        <v-flex xs6>
+
+     
+        <v-flex xs12>
                 <v-layout column class="lightgrey">
                     <v-flex xs12><h4>Inquilino</h4></v-flex>
                     <v-flex xs12>
@@ -33,24 +34,26 @@
                     </v-flex>
                 </v-layout>
             </v-flex>
-        </div>
-        <div v-else-if="mostrar === 'Vacio'">
-            <v-btn block color="info" class="mt-0">Alquilar</v-btn>
-        </div>
+      
+
     </v-card>
 </template>
 <script>
+import Alquilar from './Alquilar'
 export default {
+    components: {Alquilar},
     name: 'info-alquiler',
     data() {
         return {
-            mostrar: 'Vacio'
+            mostrar: 'Vacio',
+            activar: false
+
         }   
     },
     computed: {
         alquiler() {
             return this.$store.getters.getInmuebleActualInfo
         }
-    }
+    },
 }
 </script>
